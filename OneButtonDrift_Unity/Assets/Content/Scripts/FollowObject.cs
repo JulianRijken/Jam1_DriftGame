@@ -15,7 +15,7 @@ public class FollowObject : MonoBehaviour {
 
     public float distance = 0;
 
-    void Update ()
+    void LateUpdate ()
     {
 
 
@@ -29,7 +29,7 @@ public class FollowObject : MonoBehaviour {
 
             if (smooth == true)
             {
-                transform.position = Vector3.Lerp(transform.position, target, Time.unscaledDeltaTime / smoothTime);
+                transform.position = Vector3.Lerp(transform.position, target, Time.deltaTime / smoothTime);
             }
             else
             {
