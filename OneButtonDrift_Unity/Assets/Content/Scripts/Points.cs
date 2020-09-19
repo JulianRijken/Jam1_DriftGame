@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,43 +9,38 @@ public class Points : MonoBehaviour
 
     [HideInInspector] public Player player;
 
-    private float totalPoints = 0;
+    public float multyplyBarValue;
+    public float timesPoints;
+    public Slider multiplyBar;
     public TextMeshProUGUI totalPointsText;
+    public TextMeshProUGUI multyplyText;
+
+    private float totalPoints = 0;
     private float streakPoints = 0;
-    private TextMeshProUGUI streakPointText;
     private float streakTimer;
-
     private float airTimer;
-
     private float driftTimer;
     private float angle;
+    private TextMeshProUGUI streakPointText;
 
-    public Slider multiplyBar;
-    public TextMeshProUGUI multyplyText;
-    public float multyplyBarValue;
 
-    public float timesPoints;
-
-    void Update()
+    private void Update()
     {
 
-        if(totalPoints >= PlayerPrefs.GetInt("HighScore"))
-        {
+        if (totalPoints >= PlayerPrefs.GetInt("HighScore"))    
             PlayerPrefs.SetInt("HighScore", (int)totalPoints);
-        }
+        
 
-
-
-        multyplyBarValue = Mathf.Clamp(multyplyBarValue, 0,100);
+        multyplyBarValue = Mathf.Clamp(multyplyBarValue, 0, 100);
         multiplyBar.value = Mathf.Lerp(multiplyBar.value, multyplyBarValue, Time.deltaTime);
 
         multyplyText.text = "x" + timesPoints;
 
-        if((int)multiplyBar.value < 25)
+        if ((int)multiplyBar.value < 25)
         {
             timesPoints = 1;
         }
-        else if((int)multiplyBar.value < 50)
+        else if ((int)multiplyBar.value < 50)
         {
             timesPoints = 2;
         }
@@ -78,47 +73,37 @@ public class Points : MonoBehaviour
         else
         {
             streakPointText = GameObject.FindGameObjectWithTag("Player").GetComponentInChildren<TextMeshProUGUI>();
-
         }
 
-
         multyplyBarValue -= Time.deltaTime / 2;
-
     }
 
-    void AddMultyplyBar(float ammount)
+    private void AddMultyplyBar(float ammount)
     {
-
         multyplyBarValue += ammount / 10;
-
     }
 
-
-    void AddStreakPoints(float _point)
+    private void AddStreakPoints(float _point)
     {
         if (player.died == false)
         {
             streakPointText.GetComponent<Animator>().SetTrigger("Add");
             streakPoints += _point;
             streakTimer = 0;
-
-            
         }
     }
 
-    void AddTotalPoints(float _point)
+    private void AddTotalPoints(float _point)
     {
         if (player.died == false)
         {
             totalPointsText.GetComponent<Animator>().SetTrigger("AddTotalPoints");
-
             totalPoints += _point;
-
         }
     }
 
 
-    void JumpPoints()
+    private void JumpPoints()
     {
         if (player.grounded == false && player.speed > 1)
         {
@@ -138,13 +123,8 @@ public class Points : MonoBehaviour
         }
     }
 
-
-    void DriftPoints()
+    private void DriftPoints()
     {
-
-        
-
-
         angle = Vector3.Angle(player.transform.position, player.transform.TransformDirection(new Vector3(0, 0, 10))) - Vector3.Angle(player.transform.position, player.rig.velocity);
         angle = Mathf.Abs(angle);
 
